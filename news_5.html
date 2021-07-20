@@ -1,0 +1,101 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <title>api 연습</title>
+  
+    <style>
+      * {box-sizing:border-box; margin:0;} 
+      a {text-decoration:none; color:#333;}
+       article {width:330px; height:650px; }
+       .box {width:100%; height:auto; float:left; text-align:center; padding:10px; border-bottom:1px solid #ddd; } 
+
+       .box > h5 {text-align:left; font-size:13px; padding:5px 0px;}
+       .box > h5 > a { color:#333; }
+       .box > h5 > a:hover {text-decoration:underline;} 
+       .box > p {text-align:left; line-height:16px; font-size:12px; padding:5px 0px;}
+       .box  a {font-size:11px; color:#666; text-align:left;  } 
+       .box:hover {text-decoration:underline;} 
+
+       .box >span {font-size:11px; color:#666; text-align:right; display:block; } 
+
+    </style>
+
+
+  </head>
+  <body>
+
+
+    <h2>웹 문서 search API</h2><br><br>
+   <article>    
+
+       <div class="box"></div>
+
+       <div class="box"></div>
+
+       <div class="box"></div>
+ 
+       <div class="box"></div>
+
+   </article>
+  
+
+ <script
+  src="https://code.jquery.com/jquery-3.5.1.js"
+  integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+  crossorigin="anonymous"></script>
+
+   		
+    <script>
+      $.ajax({
+        method: "GET",
+        url: "https://dapi.kakao.com/v2/search/web",
+        data: { query:"동해바다" },
+        headers:{Authorization: "KakaoAK c8ffc3ab6fd3e90abbd76c604e685526"}
+      })
+        .done(function( msg ) {
+
+            console.log( msg.documents[1].title );
+            console.log( msg.documents[1].url);
+  
+
+
+
+   
+
+
+          // for문 (8개)
+            var boxs = document.getElementsByClassName('box');
+            
+            for(var i=0; i<boxs.length; i++){
+ 
+
+                  $("div").eq(i).append("<h5>"+msg.documents[i].title+"</h5>");
+
+                 //기사 내용
+                  var str=msg.documents[i].contents;
+                  var str2=str.substring(0,135);
+
+
+                  $("div").eq(i).append("<p>"+str2+"</p>");
+               
+                  
+               
+                  //기사 날짜
+                 var time=msg.documents[i].datetime;
+                 var time2=time.substring(0,10);
+                $("div").eq(i).append("<span>"+time2+"</span>");
+
+                //기사 url  감싸기
+                 $("div").eq(i).wrap('<a href="' + msg.documents[i].url + '" />');  
+          
+         
+           }
+
+
+        });
+
+    </script>
+  </body>
+</html>
+
+
